@@ -24,7 +24,7 @@ export default function RootLayout({
           <div className="min-h-screen light-bg-gradient dark:bg-black transition-all duration-300">
             {/* Sticky Top Bar */}
             <header className="sticky top-0 z-50 w-full flex justify-center px-4 pt-4">
-              <div className="glass w-full max-w-6xl px-8 py-5 flex items-center justify-between">
+              <div className="glass w-full max-w-6xl px-8 py-5 flex flex-col gap-2">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-inner" />
                   <h1
@@ -34,11 +34,13 @@ export default function RootLayout({
                     HR Dashboard
                   </h1>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-between mt-2">
                   <span className="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-300">
                     Track and manage employee performance
                   </span>
-                  <ThemeSwitcher />
+                  <div className="flex flex-1 justify-end items-center">
+                    <ThemeSwitcher />
+                  </div>
                 </div>
               </div>
             </header>

@@ -2,7 +2,22 @@
 
 import React, { useEffect, useState } from 'react';
 import UserCard from '@/components/UserCard';
+import Sidebar from '@/components/Sidebar';
 import { User, UserWithPerformance } from '@/lib/types';
+
+const departments = [
+  "Engineering",
+  "Support",
+  "Research and Development",
+  "Human Resources",
+  "Product Management",
+  "Marketing",
+  "Services",
+  "Accounting",
+  "Training",
+  "Legal",
+  "Sales",
+];
 
 export default function HomePage() {
   const [users, setUsers] = useState<UserWithPerformance[]>([]);
@@ -16,6 +31,7 @@ export default function HomePage() {
 
         const usersWithPerformance = data.users.map((user: User) => ({
           ...user,
+          department: departments[Math.floor(Math.random() * departments.length)],
           performanceRating: Math.floor(Math.random() * 5) + 1,
         }));
 
@@ -29,23 +45,28 @@ export default function HomePage() {
     fetchUsers();
   }, []);
 
+  const usersByDepartment: { [key: string]: UserWithPerformance[] } = {};
+  departments.forEach((dept) => {
+    usersByDepartment[dept] = users.filter((user) => user.department === dept);
+  });
+
   return (
-    <main className="bg-gray-50 dark:bg-black min-h-screen transition-colors duration-300">
-      <div className="max-w-7xl mx-auto mt-16 px-4 sm:px-6 lg:px-8">
-        {users.length > 0 ? (
-          <div className="flex flex-wrap justify-center gap-10">
-            {users.map((user) => (
-              <UserCard key={user.id} user={user} />
-            ))}
+    <div className="flex">
+      <Sidebar departments={departments} />
+      <main className="ml-64 flex-1 bg-gray-50 dark:bg-black min-h-screen transition-colors duration-300 px-4 sm:px-6 lg:px-8 pt-16">
+        {departments.map((dept) => (
+          <div key={dept} id={dept} className="mb-12">
+            <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
+              {dept} Department
+            </h2>
+            <div className="flex flex-wrap justify-center gap-10">
+              {usersByDepartment[dept]?.map((user) => (
+                <UserCard key={user.id} user={user} />
+              ))}
+            </div>
           </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500 dark:text-gray-400">
-              No users found or failed to load data.
-            </p>
-          </div>
-        )}
-      </div>
-    </main>
+        ))}
+      </main>
+    </div>
   );
 }
